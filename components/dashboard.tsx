@@ -122,33 +122,46 @@ export function Dashboard() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b border-input bg-muted sticky top-0 z-30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-foreground">Tugas Besar Cloud Computing 2026</h1>
-            <p className="text-sm text-muted-foreground">
-              Tester dan kelola endpoint REST API Anda
-            </p>
+      <header className="border-b border-border bg-card sticky top-0 z-30 shadow-sm">
+        <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+          <div className="flex-1">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                <div className="w-5 h-5 rounded bg-primary"></div>
+              </div>
+              <div>
+                <h1 className="text-xl font-semibold text-foreground">Tugas Besar Cloud Computing 2026</h1>
+                <p className="text-xs text-muted-foreground">
+                  Tester dan kelola endpoint REST API Anda
+                </p>
+              </div>
+            </div>
           </div>
           <StatusIndicator />
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Sidebar */}
           <aside className="lg:col-span-1">
-            <div className="space-y-6">
-              <div className="bg-card border border-input rounded-lg p-6">
-                <h2 className="text-lg font-semibold text-foreground mb-4">
+            <div className="space-y-4">
+              <div className="bg-card border border-border rounded-lg p-5 hover:shadow-md transition-shadow">
+                <h2 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
+                  <svg className="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v1h8v-1zm-2 2a1 1 0 11-2 0 1 1 0 012 0z" />
+                  </svg>
                   Konfigurasi
                 </h2>
                 <ApiConfiguration />
               </div>
 
               {api.isConnected && (
-                <div className="bg-card border border-input rounded-lg p-6">
-                  <h2 className="text-lg font-semibold text-foreground mb-4">
+                <div className="bg-card border border-border rounded-lg p-5 hover:shadow-md transition-shadow">
+                  <h2 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
+                    <svg className="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M7 3a1 1 0 000 2h6a1 1 0 000-2H7zM4 7a1 1 0 011-1h10a1 1 0 011 1v10a2 2 0 01-2 2H6a2 2 0 01-2-2V7z" />
+                    </svg>
                     Skema
                   </h2>
                   <SchemaEditor />
@@ -160,15 +173,27 @@ export function Dashboard() {
           {/* Main Content */}
           <main className="lg:col-span-3">
             {!api.isConnected ? (
-              <div className="bg-card border border-input rounded-lg p-8 text-center">
-                <p className="text-muted-foreground mb-4">
-                  Hubungkan ke API untuk memulai
+              <div className="bg-card border border-border rounded-lg p-12 text-center hover:shadow-md transition-shadow">
+                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.658 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                  </svg>
+                </div>
+                <p className="text-foreground font-medium mb-2">Mulai dengan menghubungkan API</p>
+                <p className="text-sm text-muted-foreground">
+                  Masukkan URL dasar API di panel konfigurasi di sebelah kiri
                 </p>
               </div>
             ) : !api.activeResource ? (
-              <div className="bg-card border border-input rounded-lg p-8 text-center">
-                <p className="text-muted-foreground">
-                  Pilih atau konfigurasi sumber daya di sidebar
+              <div className="bg-card border border-border rounded-lg p-12 text-center hover:shadow-md transition-shadow">
+                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                  </svg>
+                </div>
+                <p className="text-foreground font-medium mb-2">Tentukan skema API Anda</p>
+                <p className="text-sm text-muted-foreground">
+                  Atur nama sumber daya dan tambahkan bidang skema di panel Skema
                 </p>
               </div>
             ) : (

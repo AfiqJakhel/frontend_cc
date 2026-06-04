@@ -57,33 +57,41 @@ export function DynamicTable({
 
   return (
     <div className="space-y-4">
-      <div className="flex gap-2 items-center">
-        <input
-          type="text"
-          placeholder="Cari catatan..."
-          value={searchQuery}
-          onChange={(e) => onSearch(e.target.value)}
-          disabled={isLoading}
-          className="flex-1 px-3 py-2 border border-input rounded-md bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-        />
-        <Button onClick={onNew} disabled={isLoading}>
+      <div className="flex gap-3 items-center">
+        <div className="flex-1 relative">
+          <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <input
+            type="text"
+            placeholder="Cari catatan..."
+            value={searchQuery}
+            onChange={(e) => onSearch(e.target.value)}
+            disabled={isLoading}
+            className="w-full pl-9 pr-3 py-2 border border-border rounded-md bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
+          />
+        </div>
+        <Button onClick={onNew} disabled={isLoading} className="flex items-center gap-2">
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+          </svg>
           Catatan Baru
         </Button>
       </div>
 
-      <div className="overflow-x-auto border border-input rounded-md">
+      <div className="overflow-x-auto border border-border rounded-lg bg-card shadow-sm">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-input bg-muted">
+            <tr className="border-b border-border bg-secondary/30">
               {columns.map((col) => (
                 <th
                   key={col}
-                  className="px-4 py-2 text-left font-semibold text-foreground"
+                  className="px-4 py-3 text-left font-semibold text-foreground"
                 >
                   {col}
                 </th>
               ))}
-              <th className="px-4 py-2 text-left font-semibold text-foreground">
+              <th className="px-4 py-3 text-left font-semibold text-foreground">
                 Tindakan
               </th>
             </tr>
@@ -97,7 +105,7 @@ export function DynamicTable({
               </tr>
             ) : (
               data.map((record, index) => (
-                <tr key={index} className="border-b border-input hover:bg-muted/50">
+                <tr key={index} className="border-b border-border hover:bg-secondary/20 transition-colors">
                   {columns.map((col) => (
                     <td
                       key={`${index}-${col}`}
@@ -114,18 +122,20 @@ export function DynamicTable({
                     <div className="flex gap-2">
                       <Button
                         size="sm"
-                        variant="outline"
+                        variant="ghost"
                         onClick={() => onEdit(record)}
                         disabled={isLoading}
+                        className="text-primary hover:bg-primary/10"
                       >
                         Edit
                       </Button>
                       {hasId && (
                         <Button
                           size="sm"
-                          variant="outline"
+                          variant="ghost"
                           onClick={() => onDelete(record.id)}
                           disabled={isLoading}
+                          className="text-destructive hover:bg-destructive/10"
                         >
                           Hapus
                         </Button>
@@ -140,24 +150,34 @@ export function DynamicTable({
       </div>
 
       {totalPages > 1 && (
-        <div className="flex items-center justify-between">
-          <span className="text-sm text-muted-foreground">
-            Halaman {currentPage} dari {totalPages} ({totalRecords} total catatan)
+        <div className="flex items-center justify-between pt-4 border-t border-border">
+          <span className="text-xs text-muted-foreground">
+            Halaman <span className="font-medium text-foreground">{currentPage}</span> dari <span className="font-medium text-foreground">{totalPages}</span> • <span className="font-medium text-foreground">{totalRecords}</span> total catatan
           </span>
           <div className="flex gap-2">
             <Button
               variant="outline"
+              size="sm"
               onClick={() => onPageChange(currentPage - 1)}
               disabled={currentPage === 1 || isLoading}
+              className="flex items-center gap-1"
             >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
               Sebelumnya
             </Button>
             <Button
               variant="outline"
+              size="sm"
               onClick={() => onPageChange(currentPage + 1)}
               disabled={currentPage === totalPages || isLoading}
+              className="flex items-center gap-1"
             >
               Selanjutnya
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
             </Button>
           </div>
         </div>
