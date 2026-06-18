@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 
 export interface Student {
   name: string;
@@ -69,67 +69,15 @@ export interface ApiContextType {
 const ApiContext = createContext<ApiContextType | undefined>(undefined);
 
 export function ApiProvider({ children }: { children: React.ReactNode }) {
-  const [baseUrl, setBaseUrl] = useState<string>(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('apiBaseUrl') || '';
-    }
-    return '';
-  });
-
-  const [schema, setSchema] = useState<ApiSchema>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('apiSchema');
-      return saved ? JSON.parse(saved) : {};
-    }
-    return {};
-  });
-
-  const [schemaConfig, setSchemaConfig] = useState<ApiSchemaConfig>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('apiSchemaConfig');
-      return saved ? JSON.parse(saved) : {};
-    }
-    return {};
-  });
-
-  const [student, setStudent] = useState<Student | null>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('student');
-      return saved ? JSON.parse(saved) : null;
-    }
-    return null;
-  });
-
-  const [resource, setResource] = useState<Resource | null>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('resource');
-      return saved ? JSON.parse(saved) : null;
-    }
-    return null;
-  });
-
-  const [endpoints, setEndpoints] = useState<Endpoints | null>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('endpoints');
-      return saved ? JSON.parse(saved) : null;
-    }
-    return null;
-  });
-
-  const [fields, setFields] = useState<SchemaField[]>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('fields');
-      return saved ? JSON.parse(saved) : [];
-    }
-    return [];
-  });
-
-  const [isConnected, setIsConnectedState] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('isConnected') === 'true';
-    }
-    return false;
-  });
+  const [baseUrl, setBaseUrl] = useState<string>('');
+  const [schema, setSchema] = useState<ApiSchema>({});
+  const [schemaConfig, setSchemaConfig] = useState<ApiSchemaConfig>({});
+  const [student, setStudent] = useState<Student | null>(null);
+  const [resource, setResource] = useState<Resource | null>(null);
+  const [endpoints, setEndpoints] = useState<Endpoints | null>(null);
+  const [fields, setFields] = useState<SchemaField[]>([]);
+  const [isConnected, setIsConnectedState] = useState(false);
+  const [activeResource, setActiveResourceState] = useState('');
 
   const setIsConnected = useCallback((connected: boolean) => {
     setIsConnectedState(connected);
@@ -138,17 +86,37 @@ export function ApiProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  const [activeResource, setActiveResourceState] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('activeResource') || '';
-    }
-    return '';
-  });
-
   const setActiveResource = useCallback((resource: string) => {
     setActiveResourceState(resource);
     if (typeof window !== 'undefined') {
       localStorage.setItem('activeResource', resource);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setBaseUrl(localStorage.getItem('apiBaseUrl') || '');
+      
+      const savedSchema = localStorage.getItem('apiSchema');
+      if (savedSchema) setSchema(JSON.parse(savedSchema));
+      
+      const savedConfig = localStorage.getItem('apiSchemaConfig');
+      if (savedConfig) setSchemaConfig(JSON.parse(savedConfig));
+      
+      const savedStudent = localStorage.getItem('student');
+      if (savedStudent) setStudent(JSON.parse(savedStudent));
+      
+      const savedResource = localStorage.getItem('resource');
+      if (savedResource) setResource(JSON.parse(savedResource));
+      
+      const savedEndpoints = localStorage.getItem('endpoints');
+      if (savedEndpoints) setEndpoints(JSON.parse(savedEndpoints));
+      
+      const savedFields = localStorage.getItem('fields');
+      if (savedFields) setFields(JSON.parse(savedFields));
+      
+      setIsConnectedState(localStorage.getItem('isConnected') === 'true');
+      setActiveResourceState(localStorage.getItem('activeResource') || '');
     }
   }, []);
   const [recordCount, setRecordCount] = useState(0);
