@@ -73,8 +73,16 @@ export class ApiService {
       const endTime = performance.now();
 
       return {
-        data: Array.isArray(response.data) ? response.data : response.data.items || [],
-        total: response.data.total || (Array.isArray(response.data) ? response.data.length : 0),
+        data: Array.isArray(response.data)
+          ? response.data
+          : response.data.data && Array.isArray(response.data.data)
+            ? response.data.data
+            : response.data.items || [],
+        total: response.data.total
+          || (response.data.data && typeof response.data.data === 'object' && 'length' in response.data.data
+            ? response.data.data.length
+            : 0)
+          || (Array.isArray(response.data) ? response.data.length : 0),
         responseTime: endTime - startTime,
         status: response.status,
       };
@@ -173,7 +181,11 @@ export class ApiService {
       const endTime = performance.now();
 
       return {
-        data: Array.isArray(response.data) ? response.data : response.data.items || [],
+        data: Array.isArray(response.data)
+          ? response.data
+          : response.data.data && Array.isArray(response.data.data)
+            ? response.data.data
+            : response.data.items || [],
         responseTime: endTime - startTime,
         status: response.status,
       };
